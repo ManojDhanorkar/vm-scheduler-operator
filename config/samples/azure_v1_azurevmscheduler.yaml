@@ -1,0 +1,12 @@
+apiVersion: azure.persistent.com/v1
+kind: AzureVMScheduler
+metadata:
+  labels:
+    app.kubernetes.io/name: azurevmscheduler
+    app.kubernetes.io/instance: azurevmscheduler-sample
+    app.kubernetes.io/part-of: vm-scheduler-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: vm-scheduler-operator
+  name: azurevmscheduler-sample
+spec:
+  # TODO(user): Add fields here

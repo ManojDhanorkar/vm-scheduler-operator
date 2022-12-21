@@ -1,0 +1,38 @@
+domain: persistent.com
+layout:
+- go.kubebuilder.io/v3
+multigroup: true
+plugins:
+  manifests.sdk.operatorframework.io/v2: {}
+  scorecard.sdk.operatorframework.io/v2: {}
+projectName: vm-scheduler-operator
+repo: github.com/ManojDhanorkar/vm-scheduler-operator
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: persistent.com
+  group: gcp
+  kind: GCPVMScheduler
+  path: github.com/ManojDhanorkar/vm-scheduler-operator/apis/gcp/v1
+  version: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: persistent.com
+  group: aws
+  kind: AWSVMScheduler
+  path: github.com/ManojDhanorkar/vm-scheduler-operator/apis/aws/v1
+  version: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: persistent.com
+  group: azure
+  kind: AzureVMScheduler
+  path: github.com/ManojDhanorkar/vm-scheduler-operator/apis/azure/v1
+  version: v1
+version: "3"

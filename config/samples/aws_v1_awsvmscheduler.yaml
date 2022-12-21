@@ -1,0 +1,27 @@
+apiVersion: aws.persistent.com/v1
+kind: AWSVMScheduler
+metadata:
+  labels:
+    app.kubernetes.io/name: awsvmscheduler
+    app.kubernetes.io/instance: awsvmscheduler-sample
+    app.kubernetes.io/part-of: vm-scheduler-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: vm-scheduler-operator
+  name: awsvmscheduler-sample
+spec:
+  # Provide image name
+  image: "quay.io/manoj_dhanorkar/awsscheduler:v1.0"
+  
+  # Provide comma separated list of AWS instance ids which will be scheduled by CR 
+  instanceIds: "i-00db611adab6f713d,i-00db611adab6f713e"
+
+  # Schedule period for the CronJob.
+  # This spec allow you to setup the start schedule for VM
+  # Default: "0 9 * * *" # every weekday at 9 AM
+  startSchedule: "0 9 * * 1-5"
+
+
+  # Schedule period for the CronJob.
+  # This spec allow you to setup the stop schedule for VM
+  # Default: "0 18 * * *" # every weekday at 6 PM
+  stopSchedule: "0 18 * * 1-5"

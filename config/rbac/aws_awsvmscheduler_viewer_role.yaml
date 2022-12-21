@@ -1,0 +1,27 @@
+# permissions for end users to view awsvmschedulers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: awsvmscheduler-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: vm-scheduler-operator
+    app.kubernetes.io/part-of: vm-scheduler-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: awsvmscheduler-viewer-role
+rules:
+- apiGroups:
+  - aws.persistent.com
+  resources:
+  - awsvmschedulers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - aws.persistent.com
+  resources:
+  - awsvmschedulers/status
+  verbs:
+  - get

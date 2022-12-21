@@ -1,0 +1,12 @@
+apiVersion: gcp.persistent.com/v1
+kind: GCPVMScheduler
+metadata:
+  labels:
+    app.kubernetes.io/name: gcpvmscheduler
+    app.kubernetes.io/instance: gcpvmscheduler-sample
+    app.kubernetes.io/part-of: vm-scheduler-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: vm-scheduler-operator
+  name: gcpvmscheduler-sample
+spec:
+  # TODO(user): Add fields here

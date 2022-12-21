@@ -1,0 +1,27 @@
+# permissions for end users to view azurevmschedulers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: azurevmscheduler-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: vm-scheduler-operator
+    app.kubernetes.io/part-of: vm-scheduler-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: azurevmscheduler-viewer-role
+rules:
+- apiGroups:
+  - azure.persistent.com
+  resources:
+  - azurevmschedulers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - azure.persistent.com
+  resources:
+  - azurevmschedulers/status
+  verbs:
+  - get
