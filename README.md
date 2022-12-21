@@ -1,8 +1,8 @@
 # vm-scheduler-operator
-// TODO(user): Add simple overview of use/purpose
+Start / Stop VM on a cloud ( Still In progress) 
 
 ## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+Provide specific schedule to start/stop a VM on cloud. Initial version will support AWS. Later on this will be extended for other clouds. 
 
 ## Getting Started
 You’ll need a Kubernetes cluster to run against. You can use [KIND](https://sigs.k8s.io/kind) to get a local cluster for testing, or run against a remote cluster.
