@@ -12,7 +12,7 @@ metadata:
   name: gcpvmscheduler-editor-role
 rules:
 - apiGroups:
-  - gcp.persistent.com
+  - gcp.xyzcompany.com
   resources:
   - gcpvmschedulers
   verbs:
@@ -24,7 +24,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - gcp.persistent.com
+  - gcp.xyzcompany.com
   resources:
   - gcpvmschedulers/status
   verbs:

@@ -12,7 +12,7 @@ metadata:
   name: gcpvmscheduler-viewer-role
 rules:
 - apiGroups:
-  - gcp.persistent.com
+  - gcp.xyzcompany.com
   resources:
   - gcpvmschedulers
   verbs:
@@ -20,7 +20,7 @@ rules:
   - list
   - watch
 - apiGroups:
-  - gcp.persistent.com
+  - gcp.xyzcompany.com
   resources:
   - gcpvmschedulers/status
   verbs:

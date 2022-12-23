@@ -1,4 +1,4 @@
-apiVersion: azure.persistent.com/v1
+apiVersion: azure.xyzcompany.com/v1
 kind: AzureVMScheduler
 metadata:
   labels:

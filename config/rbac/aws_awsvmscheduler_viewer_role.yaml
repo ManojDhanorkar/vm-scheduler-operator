@@ -12,7 +12,7 @@ metadata:
   name: awsvmscheduler-viewer-role
 rules:
 - apiGroups:
-  - aws.persistent.com
+  - aws.xyzcompany.com
   resources:
   - awsvmschedulers
   verbs:
@@ -20,7 +20,7 @@ rules:
   - list
   - watch
 - apiGroups:
-  - aws.persistent.com
+  - aws.xyzcompany.com
   resources:
   - awsvmschedulers/status
   verbs:

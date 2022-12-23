@@ -33,9 +33,9 @@ type AzureVMSchedulerReconciler struct {
 	Scheme *runtime.Scheme
 }
 
-//+kubebuilder:rbac:groups=azure.persistent.com,resources=azurevmschedulers,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=azure.persistent.com,resources=azurevmschedulers/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=azure.persistent.com,resources=azurevmschedulers/finalizers,verbs=update
+//+kubebuilder:rbac:groups=azure.xyzcompany.com,resources=azurevmschedulers,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=azure.xyzcompany.com,resources=azurevmschedulers/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=azure.xyzcompany.com,resources=azurevmschedulers/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.

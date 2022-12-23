@@ -2,9 +2,9 @@
 # since it depends on service name and namespace that are out of this kustomize package.
 # It should be run by config/default
 resources:
-- bases/gcp.persistent.com_gcpvmschedulers.yaml
-- bases/aws.persistent.com_awsvmschedulers.yaml
-- bases/azure.persistent.com_azurevmschedulers.yaml
+- bases/gcp.xyzcompany.com_gcpvmschedulers.yaml
+- bases/aws.xyzcompany.com_awsvmschedulers.yaml
+- bases/azure.xyzcompany.com_azurevmschedulers.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
 
 patchesStrategicMerge:

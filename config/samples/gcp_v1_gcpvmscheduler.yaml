@@ -1,4 +1,4 @@
-apiVersion: gcp.persistent.com/v1
+apiVersion: gcp.xyzcompany.com/v1
 kind: GCPVMScheduler
 metadata:
   labels:

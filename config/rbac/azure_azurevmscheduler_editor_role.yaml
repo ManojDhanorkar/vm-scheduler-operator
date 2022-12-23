@@ -12,7 +12,7 @@ metadata:
   name: azurevmscheduler-editor-role
 rules:
 - apiGroups:
-  - azure.persistent.com
+  - azure.xyzcompany.com
   resources:
   - azurevmschedulers
   verbs:
@@ -24,7 +24,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - azure.persistent.com
+  - azure.xyzcompany.com
   resources:
   - azurevmschedulers/status
   verbs:

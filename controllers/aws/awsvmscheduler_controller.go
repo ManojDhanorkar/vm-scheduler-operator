@@ -42,9 +42,9 @@ type AWSVMSchedulerReconciler struct {
 	Log    logr.Logger
 }
 
-//+kubebuilder:rbac:groups=aws.persistent.com,resources=awsvmschedulers,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=aws.persistent.com,resources=awsvmschedulers/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=aws.persistent.com,resources=awsvmschedulers/finalizers,verbs=update
+//+kubebuilder:rbac:groups=aws.xyzcompany.com,resources=awsvmschedulers,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=aws.xyzcompany.com,resources=awsvmschedulers/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=aws.xyzcompany.com,resources=awsvmschedulers/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.

@@ -1,4 +1,4 @@
-apiVersion: aws.persistent.com/v1
+apiVersion: aws.xyzcompany.com/v1
 kind: AWSVMScheduler
 metadata:
   labels:

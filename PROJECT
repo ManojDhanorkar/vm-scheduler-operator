@@ -1,4 +1,4 @@
-domain: persistent.com
+domain: xyzcompany.com
 layout:
 - go.kubebuilder.io/v3
 multigroup: true
@@ -12,7 +12,7 @@ resources:
     crdVersion: v1
     namespaced: true
   controller: true
-  domain: persistent.com
+  domain: xyzcompany.com
   group: gcp
   kind: GCPVMScheduler
   path: github.com/ManojDhanorkar/vm-scheduler-operator/apis/gcp/v1
@@ -21,7 +21,7 @@ resources:
     crdVersion: v1
     namespaced: true
   controller: true
-  domain: persistent.com
+  domain: xyzcompany.com
   group: aws
   kind: AWSVMScheduler
   path: github.com/ManojDhanorkar/vm-scheduler-operator/apis/aws/v1
@@ -30,7 +30,7 @@ resources:
     crdVersion: v1
     namespaced: true
   controller: true
-  domain: persistent.com
+  domain: xyzcompany.com
   group: azure
   kind: AzureVMScheduler
   path: github.com/ManojDhanorkar/vm-scheduler-operator/apis/azure/v1

@@ -5,9 +5,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
-  name: awsvmschedulers.aws.persistent.com
+  name: awsvmschedulers.aws.xyzcompany.com
 spec:
-  group: aws.persistent.com
+  group: aws.xyzcompany.com
   names:
     kind: AWSVMScheduler
     listKind: AWSVMSchedulerList
