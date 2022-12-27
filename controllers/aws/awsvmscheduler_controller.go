@@ -238,6 +238,7 @@ func (r *AWSVMSchedulerReconciler) cronJobForAWSVMScheduler(awsVMScheduler *awsv
 										},
 									}},
 							}},
+							RestartPolicy: "OnFailure",
 						},
 					},
 				},

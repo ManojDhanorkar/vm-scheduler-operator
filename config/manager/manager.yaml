@@ -71,6 +71,7 @@ spec:
         args:
         - --leader-elect
         image: quay.io/manoj_dhanorkar/vm-scheduler-operator:v1.0
+        imagePullPolicy: Always
         name: manager
         securityContext:
           allowPrivilegeEscalation: false
