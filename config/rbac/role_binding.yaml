@@ -1,25 +1,19 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: vm-scheduler-operator-cl-rolebinding
+  labels:
+    app.kubernetes.io/name: clusterrolebinding
+    app.kubernetes.io/instance: manager-rolebinding
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: vm-scheduler-operator
+    app.kubernetes.io/part-of: vm-scheduler-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: manager-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: vm-scheduler-operator-cl-role
+  name: manager-role
 subjects:
 - kind: ServiceAccount
-  name: vm-scheduler-operator-sa
+  name: controller-manager
   namespace: system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: vm-scheduler-operator-rolebinding
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: vm-scheduler-operator-role
-subjects:
-- kind: ServiceAccount
-  name: vm-scheduler-operator-sa
-  namespace: vm-scheduler-operator-ns

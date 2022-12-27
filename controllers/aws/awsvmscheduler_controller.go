@@ -29,10 +29,10 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	awsutils "github.com/ManojDhanorkar/vm-scheduler-operator/utils"
-
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	ctrllog "sigs.k8s.io/controller-runtime/pkg/log"
 )
 
 // AWSVMSchedulerReconciler reconciles a AWSVMScheduler object
@@ -45,6 +45,7 @@ type AWSVMSchedulerReconciler struct {
 //+kubebuilder:rbac:groups=aws.xyzcompany.com,resources=awsvmschedulers,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=aws.xyzcompany.com,resources=awsvmschedulers/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=aws.xyzcompany.com,resources=awsvmschedulers/finalizers,verbs=update
+//+kubebuilder:rbac:groups=batch,resources=cronjobs;jobs,verbs=get;list;watch;create;update;patch;delete
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -57,8 +58,10 @@ type AWSVMSchedulerReconciler struct {
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.13.0/pkg/reconcile
 func (r *AWSVMSchedulerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 
-	reqLogger := r.Log.WithValues("Request.Namespace", req.Namespace, "Request.Name", req.Name)
-	reqLogger.Info("Reconciling AWSVMScheduler")
+	//_ = log.FromContext(ctx)
+	log := ctrllog.FromContext(ctx)
+	//log := r.Log.WithValues("AWSVMScheduler", req.NamespacedName)
+	log.Info("Reconciling AWSVMScheduler")
 
 	// Fetch the AWSVMScheduler CR
 	//awsVMScheduler, err := services.FetchAWSVMSchedulerCR(req.Name, req.Namespace)
@@ -71,11 +74,11 @@ func (r *AWSVMSchedulerReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 			// Request object not found, could have been deleted after reconcile request.
 			// Owned objects are automatically garbage collected. For additional cleanup logic use finalizers.
 			// Return and don't requeue
-			reqLogger.Info("awsVMScheduler resource not found. Ignoring since object must be deleted.")
+			log.Info("awsVMScheduler resource not found. Ignoring since object must be deleted.")
 			return ctrl.Result{}, nil
 		}
 		// Error reading the object - requeue the request.
-		reqLogger.Error(err, "Failed to get awsVMScheduler.")
+		log.Error(err, "Failed to get awsVMScheduler.")
 		return ctrl.Result{}, err
 	}
 
@@ -90,16 +93,16 @@ func (r *AWSVMSchedulerReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	if err != nil && errors.IsNotFound(err) {
 		// Define a new CronJob
 		cron := r.cronJobForAWSVMScheduler(awsVMScheduler)
-		reqLogger.Info("Creating a new CronJob", "CronJob.Namespace", cron.Namespace, "CronJob.Name", cron.Name)
+		log.Info("Creating a new CronJob", "CronJob.Namespace", cron.Namespace, "CronJob.Name", cron.Name)
 		err = r.Client.Create(ctx, cron)
 		if err != nil {
-			reqLogger.Error(err, "Failed to create new CronJob", "CronJob.Namespace", cron.Namespace, "CronJob.Name", cron.Name)
+			log.Error(err, "Failed to create new CronJob", "CronJob.Namespace", cron.Namespace, "CronJob.Name", cron.Name)
 			return ctrl.Result{}, err
 		}
 		// Cronjob created successfully - return and requeue
 		return ctrl.Result{Requeue: true}, nil
 	} else if err != nil {
-		reqLogger.Error(err, "Failed to get Cronjob")
+		log.Error(err, "Failed to get Cronjob")
 		return ctrl.Result{}, err
 	}
 
@@ -156,7 +159,7 @@ func (r *AWSVMSchedulerReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	if applyChange {
 		err = r.Client.Update(ctx, found)
 		if err != nil {
-			reqLogger.Error(err, "Failed to update CronJob", "CronJob.Namespace", found.Namespace, "CronJob.Name", found.Name)
+			log.Error(err, "Failed to update CronJob", "CronJob.Namespace", found.Namespace, "CronJob.Name", found.Name)
 			return ctrl.Result{}, err
 		}
 		// Spec updated - return and requeue
@@ -171,7 +174,7 @@ func (r *AWSVMSchedulerReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		awsVMScheduler.Status.VMStopStatus = instanceIds
 		err := r.Client.Status().Update(ctx, awsVMScheduler)
 		if err != nil {
-			reqLogger.Error(err, "Failed to update awsVMScheduler status")
+			log.Error(err, "Failed to update awsVMScheduler status")
 			return ctrl.Result{}, err
 		}
 	}
@@ -194,7 +197,7 @@ func (r *AWSVMSchedulerReconciler) cronJobForAWSVMScheduler(awsVMScheduler *awsv
 		ObjectMeta: v1.ObjectMeta{
 			Name:      awsVMScheduler.Name,
 			Namespace: awsVMScheduler.Namespace,
-			Labels:    awsutils.AWSVMSchedulerLabels(awsVMScheduler, "awsVMScheduler"),
+			Labels:    AWSVMSchedulerLabels(awsVMScheduler, "awsVMScheduler"),
 		},
 		Spec: batchv1.CronJobSpec{
 			Schedule: awsVMScheduler.Spec.StartSchedule,
@@ -270,3 +273,11 @@ func (r *AWSVMSchedulerReconciler) cronJobForAWSVMScheduler(awsVMScheduler *awsv
 // 	}
 // 	return nil
 // }
+
+func AWSVMSchedulerLabels(v *awsv1.AWSVMScheduler, tier string) map[string]string {
+	return map[string]string{
+		"app":               "AWSVMScheduler",
+		"AWSVMScheduler_cr": v.Name,
+		"tier":              tier,
+	}
+}

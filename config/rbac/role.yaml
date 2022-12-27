@@ -58,6 +58,19 @@ rules:
   - patch
   - update
 - apiGroups:
+  - batch
+  resources:
+  - cronjobs
+  - jobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
   - gcp.xyzcompany.com
   resources:
   - gcpvmschedulers

@@ -10,7 +10,7 @@ metadata:
   name: awsvmscheduler-sample
 spec:
   # Provide image name
-  image: "quay.io/manoj_dhanorkar/awsscheduler:v1.0"
+  image: "quay.io/manoj_dhanorkar/awsvmscheduler:v1.0"
   
   # Provide comma separated list of AWS instance ids which will be scheduled by CR 
   instanceIds: "i-00db611adab6f713d,i-00db611adab6f713e"
@@ -18,7 +18,7 @@ spec:
   # Schedule period for the CronJob.
   # This spec allow you to setup the start schedule for VM
   # Default: "0 9 * * *" # every weekday at 9 AM
-  startSchedule: "0 9 * * 1-5"
+  startSchedule: "0 /5 * * 1-5"
 
 
   # Schedule period for the CronJob.
