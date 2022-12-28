@@ -230,7 +230,7 @@ func (r *AWSVMSchedulerReconciler) cronJobForAWSVMScheduler(awsVMScheduler *awsv
 								Image: awsVMScheduler.Spec.Image,
 								Env: []corev1.EnvVar{
 									{
-										Name:  "InstanceIds",
+										Name:  "ec2_instanceIds",
 										Value: awsVMScheduler.Spec.InstanceIds,
 									},
 									{
@@ -252,6 +252,17 @@ func (r *AWSVMSchedulerReconciler) cronJobForAWSVMScheduler(awsVMScheduler *awsv
 													Name: "aws-secret",
 												},
 												Key: "aws-secret-access-key",
+											},
+										},
+									},
+									{
+										Name: "AWS_DEFAULT_REGION",
+										ValueFrom: &corev1.EnvVarSource{
+											SecretKeyRef: &corev1.SecretKeySelector{
+												LocalObjectReference: corev1.LocalObjectReference{
+													Name: "aws-secret",
+												},
+												Key: "region",
 											},
 										},
 									}},

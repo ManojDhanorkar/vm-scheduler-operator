@@ -13,7 +13,7 @@ spec:
   image: "quay.io/manoj_dhanorkar/awsvmscheduler:v1.0"
   
   # Provide comma separated list of AWS instance ids which will be scheduled by CR 
-  instanceIds: "i-00db611adab6f713d,i-00db611adab6f713e"
+  instanceIds: "i-00db611adab6f713d,i-0ef1d87bdf4dd3ad1"
 
   # Schedule period for the CronJob.
   # This spec allow you to setup the start schedule for VM
