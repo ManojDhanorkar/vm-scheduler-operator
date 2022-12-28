@@ -19,6 +19,7 @@ package aws
 import (
 	"context"
 	"reflect"
+	"strconv"
 
 	awsv1 "github.com/ManojDhanorkar/vm-scheduler-operator/apis/aws/v1"
 	"github.com/go-logr/logr"
@@ -68,6 +69,9 @@ func (r *AWSVMSchedulerReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 
 	// Fetch the AWSVMScheduler instance
 	awsVMScheduler := &awsv1.AWSVMScheduler{}
+
+	log.Info(req.NamespacedName.Name)
+
 	err := r.Client.Get(ctx, req.NamespacedName, awsVMScheduler)
 	if err != nil {
 		if errors.IsNotFound(err) {
@@ -82,14 +86,15 @@ func (r *AWSVMSchedulerReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		return ctrl.Result{}, err
 	}
 
+	log.Info(awsVMScheduler.Name)
 	// Add const values for mandatory specs ( if left blank)
 	// log.Info("Adding awsVMScheduler mandatory specs")
 	// utils.AddBackupMandatorySpecs(awsVMScheduler)
-
 	// Check if the CronJob already exists, if not create a new one
 
 	found := &batchv1.CronJob{}
 	err = r.Client.Get(ctx, types.NamespacedName{Name: awsVMScheduler.Name, Namespace: awsVMScheduler.Namespace}, found)
+	//log.Info(*found.)
 	if err != nil && errors.IsNotFound(err) {
 		// Define a new CronJob
 		cron := r.cronJobForAWSVMScheduler(awsVMScheduler)
@@ -118,45 +123,58 @@ func (r *AWSVMSchedulerReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	applyChange := false
 
 	// Ensure image name is correct, update image if required
-	instanceIds := awsVMScheduler.Spec.InstanceIds
-	startSchedule := awsVMScheduler.Spec.StartSchedule
-	image := awsVMScheduler.Spec.Image
+	newInstanceIds := awsVMScheduler.Spec.InstanceIds
+	log.Info(newInstanceIds)
+
+	newStartSchedule := awsVMScheduler.Spec.StartSchedule
+	log.Info(newStartSchedule)
+
+	newImage := awsVMScheduler.Spec.Image
+	log.Info(newImage)
 
 	var currentImage string = ""
 	var currentStartSchedule string = ""
 	var currentInstanceIds string = ""
 
-	// Check schedule
+	// Check existing schedule
 	if found.Spec.Schedule != "" {
 		currentStartSchedule = found.Spec.Schedule
 	}
 
-	if startSchedule != currentStartSchedule {
-		found.Spec.Schedule = currentStartSchedule
+	if newStartSchedule != currentStartSchedule {
+		found.Spec.Schedule = newStartSchedule
 		applyChange = true
 	}
 
-	// Check image
+	// Check existing image
 	if found.Spec.JobTemplate.Spec.Template.Spec.Containers != nil {
 		currentImage = found.Spec.JobTemplate.Spec.Template.Spec.Containers[0].Image
 	}
 
-	if image != currentImage {
-		found.Spec.JobTemplate.Spec.Template.Spec.Containers[0].Image = currentImage
+	if newImage != currentImage {
+		found.Spec.JobTemplate.Spec.Template.Spec.Containers[0].Image = newImage
 		applyChange = true
 	}
 
 	// Check instanceIds
 	if found.Spec.JobTemplate.Spec.Template.Spec.Containers != nil {
-		currentInstanceIds = found.Spec.JobTemplate.Spec.Template.Spec.Containers[0].Env[0].Name
+		currentInstanceIds = found.Spec.JobTemplate.Spec.Template.Spec.Containers[0].Env[0].Value
+		log.Info(currentInstanceIds)
 	}
 
-	if instanceIds != currentInstanceIds {
-		found.Spec.JobTemplate.Spec.Template.Spec.Containers[0].Env[0].Name = currentInstanceIds
+	if newInstanceIds != currentInstanceIds {
+		found.Spec.JobTemplate.Spec.Template.Spec.Containers[0].Env[0].Value = newInstanceIds
 		applyChange = true
 	}
 
+	log.Info(currentInstanceIds)
+	log.Info(currentImage)
+	log.Info(currentStartSchedule)
+
+	log.Info(strconv.FormatBool(applyChange))
+
 	if applyChange {
+		log.Info(strconv.FormatBool(applyChange))
 		err = r.Client.Update(ctx, found)
 		if err != nil {
 			log.Error(err, "Failed to update CronJob", "CronJob.Namespace", found.Namespace, "CronJob.Name", found.Name)
@@ -168,10 +186,10 @@ func (r *AWSVMSchedulerReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 
 	// Update the AWSVMScheduler status
 	// TODO: Define what needs to be added in status. Currently adding just instanceIds
-	if !reflect.DeepEqual(instanceIds, awsVMScheduler.Status.VMStartStatus) ||
-		!reflect.DeepEqual(instanceIds, awsVMScheduler.Status.VMStopStatus) {
-		awsVMScheduler.Status.VMStartStatus = instanceIds
-		awsVMScheduler.Status.VMStopStatus = instanceIds
+	if !reflect.DeepEqual(currentInstanceIds, awsVMScheduler.Status.VMStartStatus) ||
+		!reflect.DeepEqual(currentInstanceIds, awsVMScheduler.Status.VMStopStatus) {
+		awsVMScheduler.Status.VMStartStatus = currentInstanceIds
+		awsVMScheduler.Status.VMStopStatus = currentInstanceIds
 		err := r.Client.Status().Update(ctx, awsVMScheduler)
 		if err != nil {
 			log.Error(err, "Failed to update awsVMScheduler status")
