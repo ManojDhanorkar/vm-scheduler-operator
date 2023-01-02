@@ -4,27 +4,100 @@ Start / Stop VM on a cloud ( Still In progress. Only start is supported)
 ## Description
 Provide specific schedule to start/stop a VM on cloud. Initial version will support AWS. Later on this will be extended for other clouds. 
 
-## Getting Started
+## Getting Started 
 You’ll need a Kubernetes cluster to run against. You can use [KIND](https://sigs.k8s.io/kind) to get a local cluster for testing, or run against a remote cluster.
 **Note:** Your controller will automatically use the current context in your kubeconfig file (i.e. whatever cluster `kubectl cluster-info` shows).
 
-### Running on the cluster
+
+### Setup and Development
+
+Note: EC2 with Ubuntu was used for the development purpose. 
+
+Dependencies :
+1. Install minikube and docker.
+2. Install operator sdk and other dependencies.
+3. Create git repo github.com/ManojDhanorkar/vm-scheduler-operator with no contents
+4. Clone your repo to your folder and create go project.
+```sh
+go mod init github.com/ManojDhanorkar/aws-vm-scheduler
+go mod tidy 
+```
+
+
+Steps:
+1. Generate go operator scheleton using operator SDK . 
+
+```sh
+operator-sdk init --domain mycompany.com --repo github.com/ManojDhanorkar/vm-scheduler-operator
+```
+2. Enable multigroup 
+
+```sh
+operator-sdk edit --multigroup=true
+```
+
+3. Generate API  
+
+```sh
+operator-sdk create api \
+    --group=aws \
+    --version=v1 \
+    --kind=AWSVMScheduler
+
+
+	operator-sdk create api \
+    --group=azure \
+    --version=v1 \
+    --kind=AzureVMScheduler
+
+	operator-sdk create api \
+    --group=gcp \
+    --version=v1 \
+    --kind=GCPVMScheduler
+```
+
+4. Follow operator tutorials to update the files for your CR and reconciler.
+
+Use "make generate" and "make manifests"  
+
+https://sdk.operatorframework.io/docs/building-operators/golang/tutorial/
+https://docs.openshift.com/container-platform/4.11/operators/operator_sdk/golang/osdk-golang-tutorial.html
+
+5. export IMG
+
+```sh
+export IMG=quay.io/manoj_dhanorkar/vm-scheduler-operator:v1.0
+```
+
+6. Build and push your image to the location specified by `IMG`:
+	
+```sh
+make docker-build docker-push 
+```
+
+7. Running locally ( outside cluster. This will help you identify most of the errors with your code before you deploy to cluster  ) 
+
+```sh
+make install run  
+```
+
+7. Deploy the controller to the cluster with the image specified by `IMG`:
+
+```sh
+make deploy 
+```
+
+### Apply CR 
 1. Install Instances of Custom Resources:
 
 ```sh
 kubectl apply -f config/samples/
 ```
 
-2. Build and push your image to the location specified by `IMG`:
-	
-```sh
-make docker-build docker-push IMG=<some-registry>/vm-scheduler-operator:tag
-```
-	
-3. Deploy the controller to the cluster with the image specified by `IMG`:
+2. Check if cron is created by controller . The namespace will be automatically created. 
 
 ```sh
-make deploy IMG=<some-registry>/vm-scheduler-operator:tag
+kubectl get all -n vm-scheduler-operator-system 
 ```
 
 ### Uninstall CRDs
