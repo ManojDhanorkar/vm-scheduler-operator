@@ -1,5 +1,5 @@
 # vm-scheduler-operator
-Start / Stop VM on a cloud ( Still In progress) 
+Start / Stop VM on a cloud ( Still In progress. Only start is supported) 
 
 ## Description
 Provide specific schedule to start/stop a VM on cloud. Initial version will support AWS. Later on this will be extended for other clouds. 
