@@ -28,7 +28,7 @@ Steps:
 1. Generate go operator scheleton using operator SDK . 
 
 ```sh
-operator-sdk init --domain mycompany.com --repo github.com/ManojDhanorkar/vm-scheduler-operator
+operator-sdk init --domain xyzcompany.com --repo github.com/ManojDhanorkar/vm-scheduler-operator
 ```
 2. Enable multigroup 
 
