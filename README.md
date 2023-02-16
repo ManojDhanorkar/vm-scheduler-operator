@@ -19,7 +19,7 @@ Dependencies :
 3. Create git repo github.com/ManojDhanorkar/vm-scheduler-operator with no contents
 4. Clone your repo to your folder and create go project.
 ```sh
-go mod init github.com/ManojDhanorkar/aws-vm-scheduler
+go mod init github.com/ManojDhanorkar/vm-scheduler-operator
 go mod tidy 
 ```
 
